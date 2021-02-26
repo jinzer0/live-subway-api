@@ -5,7 +5,7 @@ from slacker import Slacker
 slack_token = "xoxb-1727525807426-1720771606966-LZ2soxKqJbdEBrinFhYofwGz"
 channel_name = "lyrics"
 url = "https://slack.com/api/conversations.list"
-params ={
+params = {
     "Content-Type": "application/x-www-form-urlencoded",
     "token": slack_token
 }
@@ -15,6 +15,7 @@ params ={
 슬랙커, 슬랙sdk 모듈 작도 안됨
 open api json형식으로 받기 성공
 """
+
 
 # s_res = r.get(url=url, params=params)
 # print(s_res.json())
@@ -37,4 +38,4 @@ def PostMessage():
 # print(result['errorMessage'])
 
 
-#slack message 필요
+# slack message 필요
