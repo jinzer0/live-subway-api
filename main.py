@@ -2,7 +2,7 @@ import requests as r
 import slack_sdk
 from slacker import Slacker
 
-slack_token = "xoxb-1727525807426-1720771606966-Uvd1Xqa7pwrcEXamvUKRoGw4"
+slack_token = "xoxb-1727525807426-1720771606966-LZ2soxKqJbdEBrinFhYofwGz"
 channel_name = "lyrics"
 url = "https://slack.com/api/conversations.list"
 params ={
