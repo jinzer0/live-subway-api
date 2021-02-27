@@ -100,9 +100,9 @@ def SendMessage():
 따뜻한 꿈속에서
 조금 쉬고 올 거야
     """
-    channel_id="C01MS4HJMTK"
-    ts="1614419786.001000"
-    url="https://slack.com/api/chat.postMessage"
+    channel_id = "C01MS4HJMTK"
+    ts = "1614419786.001000"
+    url = "https://slack.com/api/chat.postMessage"
     para_dict = {
         "Content-Type": "application/x-www-form-urlencoded",
         "token": slack_token,
