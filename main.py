@@ -60,46 +60,7 @@ def CheckTsnumber():
 
 
 def SendMessage():
-    message = """
-    점점 좁아지던 골목의 막힌 끝에 서서
-외투 위의 먼지를 털다 웃었어
-벽에 기대어 앉으며 짐을 내려놓으니
-한 줌의 희망이 그토록 무거웠구나
-탓할 무언가를 애써 떠올려봐도
-오직 나만의 어리석음 뿐이었네
-나 조금 누우면 안 될까
-잠깐 잠들면 안 될까
-날도 저무는데
-아무도 없는데
-나 조금 누우면 안 될까
-이대로 잠들면 안 될까
-따뜻한 꿈속에서
-조금 쉬고 올 거야
-많은 게 달라지고 변하고 시들어 가고
-애써 감춰온 나의 지친 마음도
-더는 필요 없을 자존심을 내려놓으니
-이젠 나 자신을 가엾어해도 되겠지
-탓할 무언가를 애써 떠올려봐도
-오직 나만의 어리석음 뿐이었네
-나 조금 누우면 안 될까
-잠깐 잠들면 안 될까
-날도 저무는데
-아무도 없는데
-나 조금 누우면 안 될까
-이대로 잠들면 안 될까
-따뜻한 꿈속에서
-못다한 악수와 건배를 나누며
-이제 와 뭘 어쩌겠냐고 웃으며 웃으며
-모두 보고 싶다
-나 조금 누우면 안 될까
-잠깐 잠들면 안 될까
-날도 저무는데
-아무도 없는데
-나 조금 누우면 안 될까
-이대로 잠들면 안 될까
-따뜻한 꿈속에서
-조금 쉬고 올 거야
-    """
+    message="Sample message"
     channel_id = "C01MS4HJMTK"
     ts = "1614419786.001000"
     url = "https://slack.com/api/chat.postMessage"
@@ -114,7 +75,9 @@ def SendMessage():
 
     response = r.post(url=url, params=para_dict)
 
-
+li = list(2,3,4,5)
+li.sort(reverse=True)
+print(li)
 # response = r.get(
 #     "http://swopenapi.seoul.go.kr/api/subway/4f6f6d4f4766663732374d54754153/json/realtimeStationArrival/0/5/목동")
 # print(res.status_code)
@@ -126,7 +89,5 @@ def SendMessage():
 # # print(result["arvlMsg2"])
 # print(result['errorMessage'])
 
-
-# slack message 필요
 # CheckId()
 SendMessage()
