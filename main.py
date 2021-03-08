@@ -75,11 +75,6 @@ def SendMessage():
 
     response = r.post(url=url, params=para_dict)
 
-li = list(2,3,4,5)
-li.sort(reverse=True)
-print(li)
-# response = r.get(
-#     "http://swopenapi.seoul.go.kr/api/subway/4f6f6d4f4766663732374d54754153/json/realtimeStationArrival/0/5/목동")
 # print(res.status_code)
 # # print(res.text)
 # result = res.json()
