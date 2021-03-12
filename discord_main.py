@@ -10,7 +10,20 @@ class MyClient(discord.Client):
         response = r.get(
             f"http://swopenapi.seoul.go.kr/api/subway/4f6f6d4f4766663732374d54754153/json/realtimeStationArrival/0/5/{statname}")
         result = response.json()
-        return result
+        msg = f"""
+            > 에러 코드 : 
+`{result["errorMessage"]["code"]}`
+> 업데이트 일시 : 
+`{result["realtimeArrivalList"][0]["recptnDt"].split(" ")[1].replace(".0", "")}`
+> 상태 : 
+`{result["errorMessage"]["message"]}`
+> 기차 방향 : 
+`{result["realtimeArrivalList"][0]["trainLineNm"]}`
+> 도착 예정 시간 : 
+`{int(result["realtimeArrivalList"][0]["barvlDt"]) / 60}분`
+> 열차 위치 : 
+`{result["realtimeArrivalList"][0]["arvlMsg3"]}`"""
+        return msg
 
     async def on_ready(self):
         print(f"Logged on as {self.user}!")
@@ -20,40 +33,15 @@ class MyClient(discord.Client):
 
         if message.content == "옴교" or message.content == "오목교":
             result = self.GetInfo("오목교(목동운동장앞)")
-            msg = f"""
-            > 에러 코드 : 
-`{result["errorMessage"]["code"]}`
-> 업데이트 일시 : 
-`{result["realtimeArrivalList"][0]["recptnDt"].split(" ")[1].replace(".0", "")}`
-> 상태 : 
-`{result["errorMessage"]["message"]}`
-> 기차 방향 : 
-`{result["realtimeArrivalList"][0]["trainLineNm"]}`
-> 도착 예정 시간 : 
-`{int(result["realtimeArrivalList"][0]["barvlDt"]) / 60}분`
-> 열차 위치 : 
-`{result["realtimeArrivalList"][0]["arvlMsg3"]}`"""
-            await message.channel.send(msg)
+            await message.channel.send(result)
             await message.delete()
+            await message.channel.send("반대 방향의 지하철 정보를 원합니까? [y/n]")
 
         if message.content == "ㄱㄷ" or message.content == "고덕":
             result = self.GetInfo("고덕")
-            msg = f"""
-            > 에러 코드 : 
-`{result["errorMessage"]["code"]}`
-> 업데이트 일시 : 
-`{result["realtimeArrivalList"][0]["recptnDt"].split(" ")[1].replace(".0", "")}`
-> 상태 : 
-`{result["errorMessage"]["message"]}`
-> 기차 방향 : 
-`{result["realtimeArrivalList"][0]["trainLineNm"]}`
-> 도착 예정 시간 : 
-`{int(result["realtimeArrivalList"][0]["barvlDt"]) / 60}분`
-> 열차 위치 : 
-`{result["realtimeArrivalList"][0]["arvlMsg3"]}`"""
-            await message.channel.send(msg)
+            await message.channel.send(result)
             await message.delete()
-
+            await message.channel.send("반대 방향의 지하철 정보를 원합니까? [y/n]")
 
 
 # result["errorMessage"]["total"] # 데이터 건
