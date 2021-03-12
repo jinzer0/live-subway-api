@@ -1,5 +1,6 @@
 import discord
 import requests as r
+import urllib.request
 
 bot_token = "ODE2OTQyMzQzMjE0NDY1MDY2.YECS2A.-ZEHteB08LRfjOFmGJNTKyi1uwY"
 bot_clientID = "816942343214465066"
@@ -11,7 +12,7 @@ class MyClient(discord.Client):
 
     async def on_message(self, message):
         print("message author : ", message.author, "\nmessage : ", message.content)
-        if message.content == "옴교" or message.content == "오목교":
+        if message.content == "옴교" or message.content == "오목교": # 오목교 = 오목교(목동운동장앞)
             msg = ""
             await message.channel.send(msg)
             await message.delete()
