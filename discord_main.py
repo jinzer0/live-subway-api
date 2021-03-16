@@ -10,13 +10,8 @@ class MyClient(discord.Client):
         response = r.get(
             f"http://swopenapi.seoul.go.kr/api/subway/4f6f6d4f4766663732374d54754153/json/realtimeStationArrival/0/5/{statname}")
         result = response.json()
-        msg = f"""
-            > 에러 코드 : 
-`{result["errorMessage"]["code"]}`
-> 업데이트 일시 : 
+        msg = f"""> 업데이트 일시 : 
 `{result["realtimeArrivalList"][direct]["recptnDt"].split(" ")[1].replace(".0", "")}`
-> 상태 : 
-`{result["errorMessage"]["message"]}`
 > 기차 방향 : 
 `{result["realtimeArrivalList"][direct]["trainLineNm"]}`
 > 도착 예정 시간 : 
@@ -45,13 +40,10 @@ class MyClient(discord.Client):
 
         else:
             result_1 = self.GetInfo(message.content, 0)
-            result_2=self.GetInfo(message.content, 3)
+            result_2 = self.GetInfo(message.content, 3)
             await message.channel.send(result_1)
             await message.channel.send(result_2)
             await message.delete()
-
-
-
 
 
 # result["errorMessage"]["total"] # 데이터 건
