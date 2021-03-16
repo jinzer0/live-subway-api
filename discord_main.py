@@ -6,7 +6,7 @@ bot_clientID = "816942343214465066"
 
 
 class MyClient(discord.Client):
-    def GetInfo(self, statname):
+    def GetInfo(self, statname, direct):
         response = r.get(
             f"http://swopenapi.seoul.go.kr/api/subway/4f6f6d4f4766663732374d54754153/json/realtimeStationArrival/0/5/{statname}")
         result = response.json()
@@ -14,15 +14,15 @@ class MyClient(discord.Client):
             > 에러 코드 : 
 `{result["errorMessage"]["code"]}`
 > 업데이트 일시 : 
-`{result["realtimeArrivalList"][0]["recptnDt"].split(" ")[1].replace(".0", "")}`
+`{result["realtimeArrivalList"][direct]["recptnDt"].split(" ")[1].replace(".0", "")}`
 > 상태 : 
 `{result["errorMessage"]["message"]}`
 > 기차 방향 : 
-`{result["realtimeArrivalList"][0]["trainLineNm"]}`
+`{result["realtimeArrivalList"][direct]["trainLineNm"]}`
 > 도착 예정 시간 : 
-`{int(result["realtimeArrivalList"][0]["barvlDt"]) / 60}분`
+`{int(result["realtimeArrivalList"][direct]["barvlDt"]) / 60}분`
 > 열차 위치 : 
-`{result["realtimeArrivalList"][0]["arvlMsg3"]}`"""
+`{result["realtimeArrivalList"][direct]["arvlMsg3"]}`"""
         return msg
 
     async def on_ready(self):
@@ -32,13 +32,13 @@ class MyClient(discord.Client):
         print("message author : ", message.author, "\nmessage : ", message.content)
 
         if message.content == "옴교" or message.content == "오목교":
-            result = self.GetInfo("오목교(목동운동장앞)")
+            result = self.GetInfo("오목교(목동운동장앞)", 2)
             await message.channel.send(result)
             await message.delete()
             await message.channel.send("반대 방향의 지하철 정보를 원합니까? [y/n]")
 
         if message.content == "ㄱㄷ" or message.content == "고덕":
-            result = self.GetInfo("고덕")
+            result = self.GetInfo("고덕", 0)
             await message.channel.send(result)
             await message.delete()
             await message.channel.send("반대 방향의 지하철 정보를 원합니까? [y/n]")
