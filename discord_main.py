@@ -37,11 +37,21 @@ class MyClient(discord.Client):
             await message.delete()
             await message.channel.send("반대 방향의 지하철 정보를 원합니까? [y/n]")
 
-        if message.content == "ㄱㄷ" or message.content == "고덕":
+        elif message.content == "ㄱㄷ" or message.content == "고덕":
             result = self.GetInfo("고덕", 0)
             await message.channel.send(result)
             await message.delete()
             await message.channel.send("반대 방향의 지하철 정보를 원합니까? [y/n]")
+
+        else:
+            result_1 = self.GetInfo(message.content, 0)
+            result_2=self.GetInfo(message.content, 3)
+            await message.channel.send(result_1)
+            await message.channel.send(result_2)
+            await message.delete()
+
+
+
 
 
 # result["errorMessage"]["total"] # 데이터 건
