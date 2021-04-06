@@ -27,6 +27,9 @@ class MyClient(discord.Client):
         print("message author : ", message.author,
               "\nmessage : ", message.content)
 
+        if message.author.bot:
+            return
+
         if message.content == "옴교" or message.content == "오목교":
             result = self.GetInfo("오목교(목동운동장앞)", 2)
             await message.channel.send(result)
