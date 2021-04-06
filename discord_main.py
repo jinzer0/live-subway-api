@@ -24,10 +24,12 @@ class MyClient(discord.Client):
         print(f"Logged on as {self.user}!")
 
     async def on_message(self, message):
+        print("------------------------------------------------------")
         print("message author : ", message.author,
               "\nmessage : ", message.content)
-
-        if message.author.bot:
+        print(message.channel.id)
+        print("------------------------------------------------------")
+        if message.author.bot or message.channel.name=="lyrics":
             return
 
         if message.content == "옴교" or message.content == "오목교":
