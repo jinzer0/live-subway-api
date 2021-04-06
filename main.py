@@ -29,7 +29,8 @@ def CheckId():
 
     response = r.get(url=url, params=para_dict)
     channel_list = pandas.json_normalize(response.json()["channels"])
-    channel_id = list(channel_list.loc[channel_list["name"] == channel_name, "id"])[0]
+    channel_id = list(
+        channel_list.loc[channel_list["name"] == channel_name, "id"])[0]
 
     print(f"""
     채널 이름: {channel_name}
@@ -50,7 +51,8 @@ def CheckTsnumber():
     response = r.get(url=url, params=para_dict)
     print(response.json())
     chat_data = pandas.json_normalize(response.json()["messages"])
-    chat_data['text'] = chat_data['text'].apply(lambda x: x.replace("\xa0", " "))
+    chat_data['text'] = chat_data['text'].apply(
+        lambda x: x.replace("\xa0", " "))
     ts = chat_data.loc[chat_data['text'] == test_text, 'ts'].to_list()[0]
 
     print(f"""
@@ -60,7 +62,7 @@ def CheckTsnumber():
 
 
 def SendMessage():
-    message="Sample message"
+    message = "Sample message"
     channel_id = "C01MS4HJMTK"
     ts = "1614419786.001000"
     url = "https://slack.com/api/chat.postMessage"
@@ -83,6 +85,7 @@ def SendMessage():
 #
 # # print(result["arvlMsg2"])
 # print(result['errorMessage'])
+
 
 # CheckId()
 SendMessage()
