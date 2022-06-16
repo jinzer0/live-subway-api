@@ -1,29 +1,7 @@
 import requests as r
 from pyfiglet import Figlet
-import openpyxl
 import re
-
-
-def get_info(statname: str, direct: int):
-    response = r.get(
-        f"http://swopenapi.seoul.go.kr/api/subway/4f6f6d4f4766663732374d54754153/json/realtimeStationArrival/0/5/{statname}")
-    result = dict(response.json())
-    for i in result["realtimeArrivalList"][0]["subwayList"].split(","):
-        for j in ["상행", "하행", "외선", "내선"]:
-            continue
-            # TODO - 호선넘버, 상하행 각 1개씩 출력하도록
-    if "realtimeArrivalList" in result.keys():
-
-        msg = f"""
-> 기차 방향 : {result["realtimeArrivalList"][direct]["trainLineNm"]}
-> 도착 예정 시간 : {int(int(result["realtimeArrivalList"][direct]["barvlDt"]) / 60)}분
-> 열차 위치 : {result["realtimeArrivalList"][direct]["arvlMsg3"]}"""
-
-    elif result["code"].split("-")[1] == '200':
-        msg = False
-
-    return msg
-
+import time
 
 station_data = ['소요산', '동두천', '보산', '동두천중앙', '지행', '덕정', '덕계', '양주', '녹양', '가능', '의정부', '회룡', '망월사', '도봉산', '도봉', '방학', '창동', '녹천', '월계', '광운대', '석계',
                 '신이문', '외대앞', '회기', '청량리', '제기동', '신설동', '동묘앞', '동대문', '종로5가', '종로3가', '종각', '시청', '서울', '남영', '용산', '노량진', '대방', '신길', '영등포', '신도림',
@@ -68,16 +46,37 @@ station_data = ['소요산', '동두천', '보산', '동두천중앙', '지행',
 #     station_data.append(sheet.cell(row=i, column=3).value)
 
 
-# TODO 1. get_info로 받은 내용 에러 캐치
-#   2. 내용 2개 출력 상행 하행
-#   3. 도착 시간 실시간 갱신(매 10초)
-#   4. 역 여러개 추가, 삭제할 수 있게d
+def get_info(statname: str, subway_id: int):
+    heading = ["오른쪽", "왼쪽"]
+    msg = ""
+    response = r.get(
+        f"http://swopenapi.seoul.go.kr/api/subway/4f6f6d4f4766663732374d54754153/json/realtimeStationArrival/0/10/{statname}")
+    result = dict(response.json())
+    if "realtimeArrivalList" in result.keys():
+        count = result["errorMessage"]["total"]
+        for i in range(count):
+            if result["realtimeArrivalList"][i]["subwayId"] == "100" + str(subway_id):
+                if result["realtimeArrivalList"][i]["subwayHeading"] in heading:
+                    eta = str(int(int(result["realtimeArrivalList"][i]["barvlDt"]) / 60)) + "분" if int(
+                        int(result["realtimeArrivalList"][i]["barvlDt"]) / 60) > 1 else "곧 도착"
+                    msg_0 = f"""
+    > 기차 방향 : {result["realtimeArrivalList"][i]["trainLineNm"]}
+    > 도착 예정 시간 : {eta}
+    > 열차 위치 : {result["realtimeArrivalList"][i]["arvlMsg3"]}\n"""
+                    heading.remove(result["realtimeArrivalList"][i]["subwayHeading"])
+                    msg += msg_0
+
+    elif result["code"].split("-")[1] == '200':
+        msg = False
+
+    return msg
 
 
 def add_station(station_li: list):
     stat_sel = []
     while 1:
         station = input("추가하실 역명을 입력하세요 (예 : 건대, 성수, 잠실 등) : ")
+        print()
         for i in station_data:
             m = re.search(station, i)
             if m:
@@ -88,8 +87,10 @@ def add_station(station_li: list):
                 [print(f"{i + 1} - {stat_sel[i]}") for i in range(len(set(stat_sel)))]
                 sel = int(input("추가하실 역의 번호를 입력하세요 : "))
                 if sel - 1 in range(len(stat_sel)):
-                    station_li.append(stat_sel[sel - 1])
+                    num = int(input("몇호선인지 입력하세요 (예 : 2) : "))
+                    station_li.append([stat_sel[sel - 1], num])
                     print("역이 추가되었습니다.")
+                    print()
                     break
                 else:
                     print("잘못된 번호입니다. 다시 입력해주세요!")
@@ -100,7 +101,7 @@ def add_station(station_li: list):
 
 def delete_station(station_li: list):
     while 1:
-        [print(f"{i + 1} - {station_li[i]}") for i in range(len(station_li))]
+        [print(f"{i + 1} - {station_li[i][0]}역, {station_li[i][1]}호선") for i in range(len(station_li))]
         sel = int(input("삭제하실 역의 번호를 입력하세요 : "))
         if sel - 1 in range(len(station_li)):
             station_li.pop(sel - 1)
@@ -111,16 +112,21 @@ def delete_station(station_li: list):
 
 
 def realtime_info(station_li: list):
-    print("--------------------------------")
-    for station in station_li:
-        print(station)
-        print(get_info(station, 0))
-        print(get_info(station, 2))
-        print("--------------------------------")
+    sel = "y"
+    while sel == "y":
+        print("================================")
+        for station, number in station_li:
+            print(f"{station}역 {number}호선")
+            print(get_info(station, number))
+            print("================================")
+        sel = input("새로고침 하려면 y, 메뉴로 돌아가려면 n을 눌러주세요 : ")
+        print()
+        if sel == "n":
+            return
 
 
 def quit():
-    sel = input("정말 종료하시겠습니까? (y/n) : ")
+    sel = input("정말 종료하시겠습니까? (y) : ")
     if sel == "y":
         return True
     else:
@@ -129,15 +135,21 @@ def quit():
 
 def main():
     station_list = []
+    f = Figlet(font='banner3', width=1000)
+    print(f.renderText("S U B W A Y - T R A C K E R"))
+    print("\n 실시간 지하철 도착 정보를 알려주는 프로그램입니다.\n================================================================\n")
+    time.sleep(0.6)
     while 1:
+        print("================")
         print("\t  메뉴")
-        print("----------------")
+        print("================")
         print("1 - 역 추가")
         print("2 - 역 삭제")
         print("3 - 실시간 도착 정보 보기")
         print("4 - 종료")
-        print("----------------")
+        print("================")
         sel = int(input("메뉴를 선택하세요 : "))
+        print()
 
         if sel == 1:
             add_station(station_list)
