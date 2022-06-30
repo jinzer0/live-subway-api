@@ -119,6 +119,9 @@ def realtime_info(station_li: list):
             print(f"{station}역 {number}호선")
             print(get_info(station, number))
             print("================================")
+        if len(station_li) == 0:
+            print("\n등록된 역이 없습니다!\n")
+            print("================================")
         sel = input("새로고침 하려면 y, 메뉴로 돌아가려면 n을 눌러주세요 : ")
         print()
         if sel == "n":

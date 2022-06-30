@@ -1,8 +1,12 @@
 import discord
 import requests as r
+import os
+from dotenv import load_dotenv
 
-bot_token = "ODE2OTQyMzQzMjE0NDY1MDY2.YECS2A.-ZEHteB08LRfjOFmGJNTKyi1uwY"
-bot_clientID = "816942343214465066"
+load_dotenv()
+
+token = os.getenv("TOKEN")
+id = os.getenv("ID")
 
 
 class MyClient(discord.Client):
@@ -71,4 +75,4 @@ class MyClient(discord.Client):
             # result["realtimeArrivalList"]["arvlMsg3"] # 두번째도착메세지
             # result["realtimeArrivalList"]["arvlCd"] # 도착코드 // (0:진입, 1:도착, 2:출발, 3:전역출발, 4:전역진입, 5:전역도착, 99:운행중)
 myclient = MyClient()
-myclient.run(bot_token)
+myclient.run(token)

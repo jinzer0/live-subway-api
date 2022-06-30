@@ -6,5 +6,11 @@
 # Installation
 ```pip install discord```
 
+# Set TOKEN
+.env
+```dotenv
+TOKEN = "Your Token from Discord Bot"
+```
+
 # Run
 ```python discord_main.py```
